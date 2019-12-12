@@ -3,6 +3,9 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import express from "express";
 import {StaticRouter} from 'react-router-dom';
+
+import store from '../src/store/store';
+import { Provider } from "react-redux";
 import App from '../src/App';
 
 const app = express()
@@ -16,9 +19,11 @@ app.get('*', (req, res) => {
   // 把react组件，解析成html
   // 静态路由包裹App
   const content = renderToString(
-    <StaticRouter location={req.url}>
-      {App}
-    </StaticRouter>
+    <Provider store={store}>
+      <StaticRouter location={req.url}>
+        {App}
+      </StaticRouter>
+    </Provider>
   )
   // 字符串模板
   res.send(`
