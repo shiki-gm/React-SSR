@@ -2,15 +2,24 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import express from "express";
+import {StaticRouter} from 'react-router-dom';
 import App from '../src/App';
 
 const app = express()
 app.use(express.static('public'))
 
-app.get('/', (req, res) => {
+// 接所有请求，接到后在内部通过静态路由来控制
+app.get('*', (req, res) => {
+
+
   // const Page = <App title="SSR"></App>
   // 把react组件，解析成html
-  const content = renderToString(App)
+  // 静态路由包裹App
+  const content = renderToString(
+    <StaticRouter location={req.url}>
+      {App}
+    </StaticRouter>
+  )
   // 字符串模板
   res.send(`
     <html>
