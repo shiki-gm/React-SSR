@@ -2,22 +2,22 @@ import axios from "axios";
 
 // 首页逻辑
 // actionType
-const GET_LIST = 'INDEX/GET_LIST'
+const USER_INFO = 'USER/USER_INFO'
 
 // actionCreator
-const changeList = list => ({
-  type: GET_LIST,
-  list
+const changeList = data => ({
+  type: USER_INFO,
+  data
 })
 
-export const getIndexList = server => {
+export const getUserInfo = server => {
   return (dispatch, getState, axiosInstance) => {
-    return axios.get('http://localhost:9090/api/course/list')
+    return axios.get('http://localhost:9090/api/user/info')
       .then(res => {
-        const {list} = res.data
-        dispatch(changeList(list))
+        const {data} = res.data
+        dispatch(changeList(data))
       })
-      // 作业1 增加catch 方法
+      // 作业1 增加catch方法
       .catch((error) => {
         console.log(error);
       });
@@ -25,16 +25,16 @@ export const getIndexList = server => {
 }
 
 const defaultState = {
-  list: []
+  userinfo: []
 }
 
 
 export default (state=defaultState, action)=>{
   switch (action.type) {
-    case GET_LIST:
+    case USER_INFO:
       const newState = {
         ...state,
-        list: action.list
+        userinfo: action.data
       }
       return newState;
     default:

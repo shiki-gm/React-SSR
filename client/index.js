@@ -1,20 +1,27 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import App from '../src/App';
-import store from '../src/store/store';
+import routes from '../src/App';
+import {getClientStore} from '../src/store/store';
 import { Provider } from "react-redux";
 
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 
+import Header from "../src/component/Header";
+
+const store = getClientStore()
 // 客户端路由包裹
 const Page = 
   (<Provider store={store}>
     <BrowserRouter>
-      {App}
+      <Header></Header>
+      {/* 三 */}
+      {routes.map(route => <Route {...route}></Route>)}
+      {/* 二 */}
+      {/* {App} */}
     </BrowserRouter>
   </Provider>)
 
-// 注入
+// 注水
 ReactDom.hydrate(Page, document.getElementById('root'))
 
