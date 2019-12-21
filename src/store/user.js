@@ -11,16 +11,12 @@ const changeList = data => ({
 })
 
 export const getUserInfo = server => {
-  return (dispatch, getState, axiosInstance) => {
-    return axios.get('http://localhost:9090/api/user/info')
+  return (dispatch, getState, $axios) => {
+    return $axios.get('/api/user/info')
       .then(res => {
         const {data} = res.data
         dispatch(changeList(data))
       })
-      // 作业1 增加catch方法
-      .catch((error) => {
-        console.log(error);
-      });
   }
 }
 

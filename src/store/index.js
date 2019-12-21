@@ -1,5 +1,6 @@
-import axios from "axios";
+// import axios from "axios";
 
+// import moduleName from './request';
 // 首页逻辑
 // actionType
 const GET_LIST = 'INDEX/GET_LIST'
@@ -11,16 +12,12 @@ const changeList = list => ({
 })
 
 export const getIndexList = server => {
-  return (dispatch, getState, axiosInstance) => {
-    return axios.get('http://localhost:9090/api/course/list')
+  return (dispatch, getState, $axios) => {
+    return $axios.get('/api/course/list')
       .then(res => {
         const {list} = res.data
         dispatch(changeList(list))
       })
-      // 作业1 增加catch 方法
-      .catch((error) => {
-        console.log(error);
-      });
   }
 }
 

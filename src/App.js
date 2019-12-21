@@ -3,6 +3,9 @@ import {Route} from 'react-router-dom'
 import Index from './container/Index';
 import About from './container/About';
 import User from './container/User';
+import Notfound from './container/Notfound';
+
+import './App.css'
 
 // 第二次
 // export default (
@@ -22,7 +25,7 @@ export default [
     path: '/',
     component: Index,
     // loadData: Index.loadData(),  // 可以直接把组件的方法定义在这里
-    // exact: true,
+    exact: true,
     key: 'index'
   },
   {
@@ -36,5 +39,11 @@ export default [
     component: User,
     exact: true,
     key: 'user'
+  },
+  {
+    path: '/wqert',
+    component: Notfound,
+    exact: true,
+    key: 'wqert'
   }
 ]

@@ -19,3 +19,8 @@
 
 2，将client端的请求，通过server端做代理，最后真正发起请求都从server端走？
 解决办法：再想想
+
+**18节课心得**
+作业第二题：client端请求发给server，再由server转发，再返回数据渲染
+解决办法：1，发给server：定义两个axios，client是请求本地，server是请求9090，通过redux-thunk的withExtraArgument方法，分别将创建好的axios分别传给两个action。
+2.通过插件http-proxy-middleware，拦截前台请求，代理请求数据库

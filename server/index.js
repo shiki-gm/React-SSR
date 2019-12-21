@@ -2,19 +2,24 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import express from "express";
-import {StaticRouter, matchPath, Route} from 'react-router-dom';
+import {StaticRouter, matchPath, Route, Switch} from 'react-router-dom';
 
 import {getServerStore} from '../src/store/store';
 import { Provider } from "react-redux";
 import routes from '../src/App';
 
 import Header from "../src/component/Header";
+import proxy from "http-proxy-middleware";
 
 const store = getServerStore()
 
 const app = express()
 app.use(express.static('public'))
 
+app.use(
+  '/api',
+  proxy({ target: 'http://localhost:9090/', changeOrigin: true })
+);
 
 // 接所有请求，接到后在内部通过静态路由来控制
 app.get('*', (req, res) => {
@@ -25,23 +30,33 @@ app.get('*', (req, res) => {
    *  2.改完再来取方法
    */
   // 存储所有网络请求
-  const promise = []
+  const promises = []
 
   routes.some(route => {
     const match = matchPath(req.path, route)
     if (match) {
       const { loadData } = route.component
       if (loadData) {
-        promise.push(
-          loadData(store)
+        // 1.
+        const promise = new Promise((resolve, reject) => {
+          loadData(store).then(resolve).catch(resolve)
+        })
+        promises.push(
+          promise
         )
+        // promises.push(
+        //   loadData(store)
+        // )
       }
     }
   })
 
   // 等待所有网络请求结束后
-  Promise.all(promise).then(() => {
+  // 2.
+  // Promise.allSettled(promises).then(() => {
+  Promise.all(promises).then(() => {
 
+    const context = {}
 
     // 第一次
     // const Page = <App title="SSR"></App>
@@ -51,15 +66,29 @@ app.get('*', (req, res) => {
     //替换掉 前端路由BrowserRouter
     const content = renderToString(
       <Provider store={store}>
-        <StaticRouter location={req.url}>
+        <StaticRouter location={req.url} context={context}>
           <Header></Header>
           {/* 三 */}
-          {routes.map(route => <Route {...route}></Route>)}
+          <Switch>
+            {routes.map(route => <Route {...route}></Route>)}
+          </Switch>
           {/* 二 */}
           {/* {App} */}
         </StaticRouter>
       </Provider>
     )
+    console.log('context', context);
+    
+
+    if(context.statuscode) {
+      // 状态切换页面跳转
+      res.status(context.statuscode)
+    }
+
+    if(context.action === 'REPLACE') {
+      res.redirect(301, context.url)
+    }
+
     // 字符串模板
     res.send(`
       <html>

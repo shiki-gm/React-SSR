@@ -8,7 +8,7 @@
     "dev:client": "webpack --config webpack.client.js --watch",
     "dev:server": "webpack --config webpack.server.js --watch",
     "dev:start": "nodemon --watch build --exec node \"./build/bundle.js\"",
-    "start": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:start\""
+    "start": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:start\" \"nodemon mock.js\""
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,10 @@
     "@babel/core": "^7.7.5",
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.4",
+    "css-loader": "^3.4.0",
+    "http-proxy-middleware": "^0.20.0",
+    "isomorphic-style-loader": "^5.1.0",
+    "style-loader": "^1.1.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-node-externals": "^1.7.2"

@@ -20,6 +20,11 @@ module.exports = {
         options: {
           presets: ['@babel/preset-react', ['@babel/preset-env']]
         }
+      },
+      {
+        test: /\.css$/,
+        // 支持import 支持jsx
+        loader: ['style-loader', 'css-loader'],
       }
     ]
   }

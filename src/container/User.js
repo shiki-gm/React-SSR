@@ -1,12 +1,21 @@
 import React from "react";
 import {connect} from 'react-redux'
 import {getUserInfo} from '../store/user';
+import { Redirect } from "react-router-dom";
 
 function User(props) {
 
-  return <div>
-    不仅仅是{props.userinfo.name}, 还是{props.userinfo.base}
-  </div>
+  // 比如登录逻辑判断 
+  // 没登录要跳转登录
+
+  
+  return <Redirect to="/about"></Redirect>
+
+
+
+  // return <div>
+  //   不仅仅是{props.userinfo.name}, 还是{props.userinfo.base}
+  // </div>
 }
 
   // 第三次
