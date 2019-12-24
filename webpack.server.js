@@ -26,7 +26,14 @@ module.exports = {
       {
         test: /\.css$/,
         // 支持import 支持jsx
-        loader: ['isomorphic-style-loader', 'css-loader'],
+        // loader: ['isomorphic-style-loader', 'css-loader'],
+        // 模块方式注入css
+        loader: ['isomorphic-style-loader', {
+          loader: 'css-loader',
+          options: {
+            modules: true
+          }
+        }],
       }
     ]
   }

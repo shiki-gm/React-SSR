@@ -11,6 +11,9 @@ import routes from '../src/App';
 import Header from "../src/component/Header";
 import proxy from "http-proxy-middleware";
 
+import path from 'path'
+import fs from 'fs';
+
 const store = getServerStore()
 
 const app = express()
@@ -21,8 +24,23 @@ app.use(
   proxy({ target: 'http://localhost:9090/', changeOrigin: true })
 );
 
+function csrRender(res) {
+  // 读取csr文件，返回
+  const filename = path.resolve(process.cwd(), 'public/index.csr.html')
+  const html = fs.readFileSync(filename, 'utf-8')
+  return res.send(html)
+}
+
 // 接所有请求，接到后在内部通过静态路由来控制
 app.get('*', (req, res) => {
+
+  if (req.query._mode === 'csr') {
+    console.log('开启降级渲染');
+    return csrRender(res)
+  }
+
+  // 配置开关开启csr
+  // 服务器负载过高，开启csr
   // 第三次课
   /**
    * 1.获取根据路由渲染的组件, 2.拿到loadData方法，获取数据
@@ -56,7 +74,9 @@ app.get('*', (req, res) => {
   // Promise.allSettled(promises).then(() => {
   Promise.all(promises).then(() => {
 
-    const context = {}
+    const context = {
+      css: []
+    }
 
     // 第一次
     // const Page = <App title="SSR"></App>
@@ -89,12 +109,17 @@ app.get('*', (req, res) => {
       res.redirect(301, context.url)
     }
 
+    const css = context.css.join('\n')
+
     // 字符串模板
     res.send(`
       <html>
         <head>
           <meta charset="utf-8"/>
           <title>react ssr</title>
+          <script>
+            ${css}
+          </script>
         </head>
         <body>
           <div id="root">${content}</div>

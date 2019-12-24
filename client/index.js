@@ -24,6 +24,12 @@ const Page =
     </BrowserRouter>
   </Provider>)
 
-// 注水， 水合
-ReactDom.hydrate(Page, document.getElementById('root'))
+
+if (window.__context) {
+  // 注水， 水合
+  ReactDom.hydrate(Page, document.getElementById('root'))
+} else {
+  ReactDom.render(Page, document.getElementById('root'))
+}
+
 

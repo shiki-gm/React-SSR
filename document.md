@@ -24,3 +24,17 @@
 作业第二题：client端请求发给server，再由server转发，再返回数据渲染
 解决办法：1，发给server：定义两个axios，client是请求本地，server是请求9090，通过redux-thunk的withExtraArgument方法，分别将创建好的axios分别传给两个action。
 2.通过插件http-proxy-middleware，拦截前台请求，代理请求数据库
+
+**24节课心得**
+降级渲染：若想在运行环境下降级为csr，则可通过url传参方式通知。
+新建csr的html，只引入对应js文件，打包时通过HtmlWebpackPlugin插件将html注入客户端中，此时一旦收到降级请求，则立马返回此html，
+并且改hydrate为render
+
+**25节课心得**
+提取css,通过styles._getCss(),得到css文件中所有css，再通过props.staticContext传给server，server得到后注入到html模板中
+
+
+**26节课心得**
+可以新建withStyle文件，通过高级组件方法，传入组件和样式，返回一个带有样式的组件
+也可以使用isomorphic-style-loader中的withStyle方法
+不过，什么都不用，也可以把样式传进去，待考证

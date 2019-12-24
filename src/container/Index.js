@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from "react";
 import {connect} from 'react-redux'
 import {getIndexList} from '../store/index';
+import styles from './Index.css';
+import withStyle from "./withStyle";
+// server端特有方法
+// console.log(styles._getCss());
 
 function Index(props) {
 
@@ -20,8 +24,8 @@ function Index(props) {
   //   props.getIndexList()
   // }, [])
 
-  return <div>
-    <h1>我来学习 {count} 下 {props.title}</h1>
+  return <div className={styles.container}>
+    <h1 className={styles.title}>我来学习 {count} 下 {props.title}</h1>
     
     <button onClick={() => {setCount(count + 1)}}>再来</button>
 
@@ -46,3 +50,4 @@ export default connect(
   state => ({list: state.index.list}),
   {getIndexList}
 )(Index)
+// )(withStyle(Index, styles))
